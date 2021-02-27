@@ -3,52 +3,56 @@
 using namespace std;
 
 
-void fillinc(int a[], int n) {
-	for (int i = 0; i < n; ++i) {
-		a[i] = i + 1;
+const int N = 10;
+int a[N];
+
+
+void fillinc(int arr[], int size) {
+	for (int i = 0; i < size; ++i) {
+		arr[i] = i + 1;
 	}
 	return;
 }
 
-void filldec(int a[], int n) {
-	for (int j = n, i = 0; i < n; --j, ++i) {
-		a[i] = j;
+void filldec(int arr[], int size) {
+	for (int j = size, i = 0; i < size; --j, ++i) {
+		arr[i] = j;
 	}
 	return;
 }
 
-void fillrand(int a[], int n) {
+void fillrand(int arr[], int size) {
 	srand(time(NULL));
-	for (int i = 0; i < n; ++i) {
-		a[i] = rand() % 10;
+	for (int i = 0; i < size; ++i) {
+		arr[i] = rand() % 10;
 	}
 	return;
 }
 
-void printmas(int a[], int n) {
-	for (int i = 0; i < n; ++i) {
-		cout << a[i] << " ";
+void printmas(int arr[], int size) {
+	for (int i = 0; i < size; ++i) {
+		cout << arr[i] << " ";
 	}
 	return;
 }
 
-int checksum(int a[], int n) {
+int checksum(int arr[], int size) {
 	int sum = 0;
-	for (int i = 0; i < n; ++i) {
-		sum += a[i];
+	for (int i = 0; i < size; ++i) {
+		sum += arr[i];
 	}
 	return sum;
 }
 
-int runNumber(int a[], int n) {
+int runNumber(int arr[], int size) {
 	int run = 0;
-	for (int i = 0; i < n; ++i) {
-		if (i == n - 1) {
-			if (a[i] <= a[i - 1]) {
+	for (int i = 0; i < size; ++i) {
+		if (i == size - 1) {
+			if (arr[i] <= arr[i - 1]) {
 				run++;
 			}
 		}
-		else if (a[i] <= a[i + 1] && i != n - 1) {
+		else if (arr[i] <= arr[i + 1] && i != size - 1) {
 			continue;
 		}
 		else {
@@ -62,31 +66,100 @@ int runNumber(int a[], int n) {
 	return run;
 }
 
-void SelectSort(int array[], int size) {
+void SelectSort(int arr[], int size) {
 	int M = 0, C = 0;
 	for (int i = 0; i < size - 1; i++) {
 		int min = i;
 		for (int j = i + 1; j < size; j++) {
 			++C;
-			if (array[j] < array[min]) {
+			if (arr[j] < arr[min]) {
 				min = j;
 			}
 		}
 		if (min != i) {
 			++M;
-			swap(array[i], array[min]);
+			swap(arr[i], arr[min]);
 		}
 	}
-	printmas(array, size);
-	std::cout << "\nPrakti4eskoe kolvo peresilok - " << M << "\n" << "Prakti4eskoe kolvo sravneniy - " << C; 
+	printmas(arr, size);
+	std::cout << "\nPrakti4eskoe kolvo peresilok - " << 3 * M << "\n" << "Prakti4eskoe kolvo sravneniy - " << C; 
 	return;
 }	
 
+void BubleSort(int arr[], int size) {
+	int M = 0; int C = 0;
+	for (int i = 0; i < size - 1; i++)
+		for (int j = 0; j < size - i - 1; j++) {
+			++C;
+			if (arr[j] > arr[j + 1]) {
+				swap(arr[j], arr[j + 1]);
+				++M;
+			}
+		}
+	printmas(arr, size);
+	std::cout << "\nPrakti4eskoe kolvo peresilok - " << M << "\n" << "Prakti4eskoe kolvo sravneniy - " << C;
+	return;
+}
+
+void SelectSortFromLesson(int arr[], int size) {
+	int j, zm, num, c = 0, m = 0;
+	for (int i = 0; i < size; i++) {
+		num = i;
+		for (j = i + 1; j < size; j++) {
+			if (arr[j] < arr[num]) {
+				num = j;
+			}
+			c++;
+		}
+		zm = arr[num];
+		arr[num] = arr[i];
+		arr[i] = zm;
+		m = m + 3;
+	}
+	printf("C - %d\t", c);
+	printf("M - %d\n", m);
+}
+
+void ShakerSort(int* arr, int size)
+{
+	int left = 0, right = size - 1; // лева€ и права€ границы сортируемой области массива
+	int flag = 1;  // флаг наличи€ перемещений
+	// ¬ыполнение цикла пока лева€ граница не сомкнЄтс€ с правой
+	// и пока в массиве имеютс€ перемещени€
+	while ((left < right) && flag > 0)
+	{
+		flag = 0;
+		for (int i = left; i < right; i++)  //двигаемс€ слева направо
+		{
+			if (arr[i] > arr[i + 1]) // если следующий элемент меньше текущего,
+			{             // мен€ем их местами
+				double t = arr[i];
+				arr[i] = arr[i + 1];
+				arr[i + 1] = t;
+				flag = 1;      // перемещени€ в этом цикле были
+			}
+		}
+		right--; // сдвигаем правую границу на предыдущий элемент
+		for (int i = right; i > left; i--)  //двигаемс€ справа налево
+		{
+			if (arr[i - 1] > arr[i]) // если предыдущий элемент больше текущего,
+			{            // мен€ем их местами
+				double t = arr[i];
+				arr[i] = arr[i - 1];
+				arr[i - 1] = t;
+				flag = 1;    // перемещени€ в этом цикле были
+			}
+		}
+		left++; // сдвигаем левую границу на следующий элемент
+	}
+	cout << "\n";
+	printmas(arr, size);
+}
 
 
 int main() {
-	const int N = 10;
-	int a[N];
+	// Lab # 1
+/*	
 	fillinc(a, N);
 	printmas(a, N);
 	cout << "\nSum - " << checksum(a, N);
@@ -102,11 +175,51 @@ int main() {
 	cout << "\nSum - " << checksum(a, N);
 	cout <<  "\nRunTime for rand massiv - " << runNumber(a, N) << "\n";
 	cout << "\n\n\n";
+*/
+	
+
+	// Lab # 2
+/*
 	int Mtr = 3 * (N - 1), Ctr = (N * N - N) / 2;
 	SelectSort(a, N);
 	cout << "\nTheoreti4eskoe kolvo peresilok M_tr = " << Mtr << "\nTheoriti4eskoe kolvo sravneniy C_tr = " << Ctr;
 	cout << "\nSum - " << checksum(a, N);
 	cout << "\nRunTime for sorted rand massiv. Sorting Method : Selecting Sort - " << runNumber(a, N) << "\n";
 	cout << "\n\n\n";
+	fillinc(a, N);
+	printmas(a, N);
+	cout << "\n";
+	SelectSort(a, N);
+	cout << "\n\n\n";
+	filldec(a, N);
+	printmas(a, N);
+	cout << "\n";
+	SelectSort(a, N);
+	cout << "\n\n\n";
+*/
+
+
+	// Lab # 3
+/*
+	fillrand(a, N);
+	printmas(a, N);
+	cout << "\n";
+	BubleSort(a, N);
+	cout << "\n\n\n";
+	filldec(a, N);
+	printmas(a, N);
+	cout << "\n";
+	BubleSort(a, N);
+	cout << "\n\n\n";
+	fillinc(a, N);
+	printmas(a, N);
+	cout << "\n";
+	BubleSort(a, N);
+	cout << "\n\n\n";
+*/
+	cout << "\t\t\tLab #4\n";
+	filldec(a, N);
+	printmas(a, N);
+	ShakerSort(a, N);
 	return 0;
 }

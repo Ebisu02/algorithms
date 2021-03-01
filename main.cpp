@@ -3,7 +3,7 @@
 using namespace std;
 
 
-const int N = 10;
+const int N = 500;
 int a[N];
 
 
@@ -24,7 +24,7 @@ void filldec(int arr[], int size) {
 void fillrand(int arr[], int size) {
 	srand(time(NULL));
 	for (int i = 0; i < size; ++i) {
-		arr[i] = rand() % 10;
+		arr[i] = rand() % 1000;
 	}
 	return;
 }
@@ -114,7 +114,7 @@ void SelectSortFromLesson(int arr[], int size) {
 		zm = arr[num];
 		arr[num] = arr[i];
 		arr[i] = zm;
-		m = m + 3;
+		++m;
 	}
 	printf("C - %d\t", c);
 	printf("M - %d\n", m);
@@ -122,6 +122,7 @@ void SelectSortFromLesson(int arr[], int size) {
 
 void ShakerSort(int* arr, int size)
 {
+	int M = 0, C = 0;
 	int left = 0, right = size - 1; // левая и правая границы сортируемой области массива
 	int flag = 1;  // флаг наличия перемещений
 	// Выполнение цикла пока левая граница не сомкнётся с правой
@@ -129,30 +130,31 @@ void ShakerSort(int* arr, int size)
 	while ((left < right) && flag > 0)
 	{
 		flag = 0;
-		for (int i = left; i < right; i++)  //двигаемся слева направо
+		for (int i = left; i < right; i++) //двигаемся слева направо
 		{
+			++C;
 			if (arr[i] > arr[i + 1]) // если следующий элемент меньше текущего,
 			{             // меняем их местами
-				double t = arr[i];
-				arr[i] = arr[i + 1];
-				arr[i + 1] = t;
-				flag = 1;      // перемещения в этом цикле были
+				swap(arr[i], arr[i + 1]);
+				flag = 1;
+				++M;	// перемещения в этом цикле были
 			}
 		}
 		right--; // сдвигаем правую границу на предыдущий элемент
 		for (int i = right; i > left; i--)  //двигаемся справа налево
 		{
+			++C;
 			if (arr[i - 1] > arr[i]) // если предыдущий элемент больше текущего,
 			{            // меняем их местами
-				double t = arr[i];
-				arr[i] = arr[i - 1];
-				arr[i - 1] = t;
-				flag = 1;    // перемещения в этом цикле были
+				swap(arr[i], arr[i - 1]);
+				flag = 1;
+				++M;	// перемещения в этом цикле были
 			}
 		}
 		left++; // сдвигаем левую границу на следующий элемент
 	}
 	cout << "\n";
+	std::cout << "\nPrakti4eskoe kolvo peresilok - " << M << "\n" << "Prakti4eskoe kolvo sravneniy - " << C << "\n";
 	printmas(arr, size);
 }
 
@@ -218,7 +220,15 @@ int main() {
 	cout << "\n\n\n";
 */
 	cout << "\t\t\tLab #4\n";
+	fillinc(a, N);
+	printmas(a, N);
+	ShakerSort(a, N);
+	cout << "\n\n";
 	filldec(a, N);
+	printmas(a, N);
+	ShakerSort(a, N);
+	cout << "\n\n";
+	fillrand(a, N);
 	printmas(a, N);
 	ShakerSort(a, N);
 	return 0;

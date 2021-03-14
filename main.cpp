@@ -3,7 +3,7 @@
 using namespace std;
 
 
-const int N = 500;
+const int N = 10;
 int a[N];
 
 
@@ -158,6 +158,42 @@ void ShakerSort(int* arr, int size)
 	printmas(arr, size);
 }
 
+void insertSort(int arr[], int size) {
+	for (int i = 1; i < size; i++)
+	{
+		int buf = arr[i];
+		int j = i - 1;
+		while (j >= 0 && arr[j] > buf)
+		{
+			arr[j + 1] = arr[j];
+			j = j - 1;
+		}
+		arr[j + 1] = buf;
+	}
+	cout << "\n";
+	printmas(arr, size);
+	cout << "\n";
+	return;
+}
+
+void shellSort(int arr[], int size) {
+	for (int i = size / 2; i > 0; i /= 2)
+	{
+		for (int j = i; j < size; j += 1)
+		{
+			int temp = arr[j];
+			int z;
+			for (z = j; z >= i && arr[z - i] > temp; z -= i) {
+				arr[z] = arr[z - i];
+			}
+			arr[z] = temp;
+		}
+	}
+	cout << "\n";
+	printmas(arr, size);
+	cout << "\n";
+	return;
+}
 
 int main() {
 	// Lab # 1
@@ -222,14 +258,14 @@ int main() {
 	cout << "\t\t\tLab #4\n";
 	fillinc(a, N);
 	printmas(a, N);
-	ShakerSort(a, N);
+	insertSort(a, N);
 	cout << "\n\n";
 	filldec(a, N);
 	printmas(a, N);
-	ShakerSort(a, N);
+	insertSort(a, N);
 	cout << "\n\n";
 	fillrand(a, N);
 	printmas(a, N);
-	ShakerSort(a, N);
+	insertSort(a, N);
 	return 0;
 }

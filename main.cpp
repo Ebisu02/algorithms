@@ -1,11 +1,10 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <ctime>
 using namespace std;
 
 
 const int N = 10;
 int a[N];
-
 
 void fillinc(int arr[], int size) {
 	for (int i = 0; i < size; ++i) {
@@ -82,9 +81,10 @@ void SelectSort(int arr[], int size) {
 		}
 	}
 	printmas(arr, size);
-	std::cout << "\nPrakti4eskoe kolvo peresilok - " << 3 * M << "\n" << "Prakti4eskoe kolvo sravneniy - " << C; 
+	std::cout << "\nPrakti4eskoe kolvo peresilok - " << 3 * M << "\n" << "Prakti4eskoe kolvo sravneniy - " << C;
 	return;
-}	
+}
+
 
 void BubleSort(int arr[], int size) {
 	int M = 0; int C = 0;
@@ -100,6 +100,7 @@ void BubleSort(int arr[], int size) {
 	std::cout << "\nPrakti4eskoe kolvo peresilok - " << M << "\n" << "Prakti4eskoe kolvo sravneniy - " << C;
 	return;
 }
+
 
 void SelectSortFromLesson(int arr[], int size) {
 	int j, zm, num, c = 0, m = 0;
@@ -123,149 +124,263 @@ void SelectSortFromLesson(int arr[], int size) {
 void ShakerSort(int* arr, int size)
 {
 	int M = 0, C = 0;
-	int left = 0, right = size - 1; // левая и правая границы сортируемой области массива
-	int flag = 1;  // флаг наличия перемещений
-	// Выполнение цикла пока левая граница не сомкнётся с правой
-	// и пока в массиве имеются перемещения
+	int left = 0, right = size - 1; // Г«ГҐГўГ Гї ГЁ ГЇГ°Г ГўГ Гї ГЈГ°Г Г­ГЁГ¶Г» Г±Г®Г°ГІГЁГ°ГіГҐГ¬Г®Г© Г®ГЎГ«Г Г±ГІГЁ Г¬Г Г±Г±ГЁГўГ 
+	int flag = 1;  // ГґГ«Г ГЈ Г­Г Г«ГЁГ·ГЁГї ГЇГҐГ°ГҐГ¬ГҐГ№ГҐГ­ГЁГ©
+	// Г‚Г»ГЇГ®Г«Г­ГҐГ­ГЁГҐ Г¶ГЁГЄГ«Г  ГЇГ®ГЄГ  Г«ГҐГўГ Гї ГЈГ°Г Г­ГЁГ¶Г  Г­ГҐ Г±Г®Г¬ГЄГ­ВёГІГ±Гї Г± ГЇГ°Г ГўГ®Г©
+	// ГЁ ГЇГ®ГЄГ  Гў Г¬Г Г±Г±ГЁГўГҐ ГЁГ¬ГҐГѕГІГ±Гї ГЇГҐГ°ГҐГ¬ГҐГ№ГҐГ­ГЁГї
 	while ((left < right) && flag > 0)
 	{
 		flag = 0;
-		for (int i = left; i < right; i++) //двигаемся слева направо
+		for (int i = left; i < right; i++) //Г¤ГўГЁГЈГ ГҐГ¬Г±Гї Г±Г«ГҐГўГ  Г­Г ГЇГ°Г ГўГ®
 		{
 			++C;
-			if (arr[i] > arr[i + 1]) // если следующий элемент меньше текущего,
-			{             // меняем их местами
+			if (arr[i] > arr[i + 1]) // ГҐГ±Г«ГЁ Г±Г«ГҐГ¤ГіГѕГ№ГЁГ© ГЅГ«ГҐГ¬ГҐГ­ГІ Г¬ГҐГ­ГјГёГҐ ГІГҐГЄГіГ№ГҐГЈГ®,
+			{             // Г¬ГҐГ­ГїГҐГ¬ ГЁГµ Г¬ГҐГ±ГІГ Г¬ГЁ
 				swap(arr[i], arr[i + 1]);
 				flag = 1;
-				++M;	// перемещения в этом цикле были
+				++M;	// ГЇГҐГ°ГҐГ¬ГҐГ№ГҐГ­ГЁГї Гў ГЅГІГ®Г¬ Г¶ГЁГЄГ«ГҐ ГЎГ»Г«ГЁ
 			}
 		}
-		right--; // сдвигаем правую границу на предыдущий элемент
-		for (int i = right; i > left; i--)  //двигаемся справа налево
+		right--; // Г±Г¤ГўГЁГЈГ ГҐГ¬ ГЇГ°Г ГўГіГѕ ГЈГ°Г Г­ГЁГ¶Гі Г­Г  ГЇГ°ГҐГ¤Г»Г¤ГіГ№ГЁГ© ГЅГ«ГҐГ¬ГҐГ­ГІ
+		for (int i = right; i > left; i--)  //Г¤ГўГЁГЈГ ГҐГ¬Г±Гї Г±ГЇГ°Г ГўГ  Г­Г Г«ГҐГўГ®
 		{
 			++C;
-			if (arr[i - 1] > arr[i]) // если предыдущий элемент больше текущего,
-			{            // меняем их местами
+			if (arr[i - 1] > arr[i]) // ГҐГ±Г«ГЁ ГЇГ°ГҐГ¤Г»Г¤ГіГ№ГЁГ© ГЅГ«ГҐГ¬ГҐГ­ГІ ГЎГ®Г«ГјГёГҐ ГІГҐГЄГіГ№ГҐГЈГ®,
+			{            // Г¬ГҐГ­ГїГҐГ¬ ГЁГµ Г¬ГҐГ±ГІГ Г¬ГЁ
 				swap(arr[i], arr[i - 1]);
 				flag = 1;
-				++M;	// перемещения в этом цикле были
+				++M;	// ГЇГҐГ°ГҐГ¬ГҐГ№ГҐГ­ГЁГї Гў ГЅГІГ®Г¬ Г¶ГЁГЄГ«ГҐ ГЎГ»Г«ГЁ
 			}
 		}
-		left++; // сдвигаем левую границу на следующий элемент
+		left++; // Г±Г¤ГўГЁГЈГ ГҐГ¬ Г«ГҐГўГіГѕ ГЈГ°Г Г­ГЁГ¶Гі Г­Г  Г±Г«ГҐГ¤ГіГѕГ№ГЁГ© ГЅГ«ГҐГ¬ГҐГ­ГІ
 	}
-	cout << "\n";
-	std::cout << "\nPrakti4eskoe kolvo peresilok - " << M << "\n" << "Prakti4eskoe kolvo sravneniy - " << C << "\n";
-	printmas(arr, size);
 }
 
-void insertSort(int arr[], int size) {
+void insertSort(int arr[], int size, int& c, int& m) {
 	for (int i = 1; i < size; i++)
 	{
+		++c;
 		int buf = arr[i];
 		int j = i - 1;
 		while (j >= 0 && arr[j] > buf)
 		{
+			++c;
 			arr[j + 1] = arr[j];
 			j = j - 1;
+			++m;
 		}
 		arr[j + 1] = buf;
+		m += 2;
 	}
-	cout << "\n";
-	printmas(arr, size);
+	return;
+}
+
+void shellSort(int arr[], int size, int& c, int &moves) {
+	int* h;
+	h = new int [size];
+	int k, t, j;
+	int m = log(size) / log(2) - 1;
+	h[0] = 1;
+	cout << "\nSteps: \n";
+	for (int i = 1; i < m; ++i) {
+		h[i] = 2 * h[i - 1] + 1;
+	}
+	for (; m >= 1; --m) {
+		k = h[m - 1];
+		cout << k << " ";
+		for (int i = k; i < size; i++) {
+			t = a[i];
+			for (j = i - k, c++; j >= 0 and t < a[j]; j = j - k, c++) {
+				a[j + k] = a[j];
+			}
+			a[j + k] = t;
+			moves += 3;
+		}
+	}
 	cout << "\n";
 	return;
 }
 
 void shellSort(int arr[], int size) {
-	for (int i = size / 2; i > 0; i /= 2)
+	int* h;
+	h = new int[size];
+	int k, t, j;
+	int m = log(size) / log(2) - 1;
+	h[0] = 1;
+	for (int i = 1; i < m; ++i) {
+		h[i] = 2 * h[i - 1] + 1;
+	}
+	for (; m >= 1; --m) {
+		k = h[m - 1];
+		for (int i = k; i < size; i++) {
+			t = a[i];
+			for (j = i - k; j >= 0 and t < a[j]; j = j - k) {
+				a[j + k] = a[j];
+			}
+			a[j + k] = t;
+		}
+	}
+	cout << "\n";
+	return;
+}
+
+void shellSort(int arr[], int size, int& c, int& moves, int &count) {
+	int* h;
+	h = new int[size];
+	int k, t, j;
+	int m = log(size) / log(2) - 1;
+	h[0] = 1;
+	for (int i = 1; i < m; ++i) {
+		h[i] = 2 * h[i - 1] + 1;
+	}
+	for (count = 0; m >= 1; --m, ++count) {
+		k = h[m - 1];
+		for (int i = k; i < size; i++) {
+			t = a[i];
+			for (j = i - k, c++; j >= 0 and t < a[j]; j = j - k, c++) {
+				a[j + k] = a[j];
+			}
+			a[j + k] = t;
+			moves += 3;
+		}
+	}
+	return;
+}
+void shellSort_adv(int arr[], int size, int& c, int& moves, int& count) {
+	count = -1;
+	for (int i = size / 2; i > 0; i /= 2, ++count)
 	{
 		for (int j = i; j < size; j += 1)
 		{
 			int temp = arr[j];
 			int z;
-			for (z = j; z >= i && arr[z - i] > temp; z -= i) {
+			for (z = j, ++c; z >= i && arr[z - i] > temp; z -= i, ++c) {
 				arr[z] = arr[z - i];
 			}
 			arr[z] = temp;
+			moves += 3;
 		}
 	}
-	cout << "\n";
-	printmas(arr, size);
-	cout << "\n";
 	return;
 }
 
+int bin_find(int arr[], int size, int key) {
+	int left = 0;
+	int right = size - 1;
+	while (left <= right) {
+		int mid = (left + right) / 2;
+		if (arr[mid] == key) {
+			return mid;
+		}
+		if (arr[mid] < key) {
+			left = mid + 1;
+		}
+		else {
+			right = mid - 1;
+		}
+	}
+	return -1;
+}
+
+int bin_find(int arr[], int size, int key, int& c) {
+	int left = 0;
+	int right = size - 1;
+	while (left <= right) {
+		int mid = (left + right) / 2;
+		if (arr[mid] == key && ++c) {
+			return mid;
+		}
+		if (arr[mid] < key && ++c) {
+			left = mid + 1;
+		}
+		else {
+			right = mid - 1;
+		}
+	}
+	return -1;
+}
+
+int bin_find_mod(int arr[], int size, int key) {
+	int left = 0; 
+	int right = size - 1;
+	while (left < right) {
+		int mid = (left + right) / 2;
+		if (arr[mid] < key) {
+			left = mid + 1;
+		}
+		else {
+			right = mid;
+		}
+		if (arr[right] == key) {
+			return right;
+		}
+	}
+	return -1;
+}
+
+int bin_find_mod(int arr[], int size, int key, int& c) {
+	int left = 0;
+	int right = size - 1;
+	while (left < right) {
+		int mid = (left + right) / 2;
+		if (arr[mid] < key && ++c) {
+			left = mid + 1;
+		}
+		else {
+			right = mid;
+		}
+		if (arr[right] == key && ++c) {
+			return right;
+		}
+	}
+	return -1;
+}
+
 int main() {
-	// Lab # 1
-/*	
+	// Lab 7
 	fillinc(a, N);
 	printmas(a, N);
-	cout << "\nSum - " << checksum(a, N);
-	cout << "\nRunTime for inc massiv - " << runNumber(a, N) << "\n";
-	cout << "\n\n\n";
+	int key = 10;
+	cout << "\nThis key under index = " << bin_find(a, N, key) << "\n";
 	filldec(a, N);
 	printmas(a, N);
-	cout << "\nSum - " << checksum(a, N);
-	cout << "\nRunTime for dec massiv - " << runNumber(a, N) << "\n";
-	cout << "\n\n\n";
+	shellSort(a, N);
+	printmas(a, N);
+	cout << "\nThis key under index = " << bin_find(a, N, key) << "\n";
 	fillrand(a, N);
 	printmas(a, N);
-	cout << "\nSum - " << checksum(a, N);
-	cout <<  "\nRunTime for rand massiv - " << runNumber(a, N) << "\n";
-	cout << "\n\n\n";
-*/
-	
-
-	// Lab # 2
-/*
-	int Mtr = 3 * (N - 1), Ctr = (N * N - N) / 2;
-	SelectSort(a, N);
-	cout << "\nTheoreti4eskoe kolvo peresilok M_tr = " << Mtr << "\nTheoriti4eskoe kolvo sravneniy C_tr = " << Ctr;
-	cout << "\nSum - " << checksum(a, N);
-	cout << "\nRunTime for sorted rand massiv. Sorting Method : Selecting Sort - " << runNumber(a, N) << "\n";
-	cout << "\n\n\n";
-	fillinc(a, N);
+	shellSort(a, N);
 	printmas(a, N);
-	cout << "\n";
-	SelectSort(a, N);
-	cout << "\n\n\n";
-	filldec(a, N);
-	printmas(a, N);
-	cout << "\n";
-	SelectSort(a, N);
-	cout << "\n\n\n";
-*/
-
-
-	// Lab # 3
-/*
-	fillrand(a, N);
-	printmas(a, N);
-	cout << "\n";
-	BubleSort(a, N);
-	cout << "\n\n\n";
-	filldec(a, N);
-	printmas(a, N);
-	cout << "\n";
-	BubleSort(a, N);
-	cout << "\n\n\n";
-	fillinc(a, N);
-	printmas(a, N);
-	cout << "\n";
-	BubleSort(a, N);
-	cout << "\n\n\n";
-*/
-	cout << "\t\t\tLab #4\n";
-	fillinc(a, N);
-	printmas(a, N);
-	insertSort(a, N);
+	cout << "\nThis key under index = " << bin_find(a, N, key) << "\n";
 	cout << "\n\n";
+	fillinc(a, N);
+	printmas(a, N);
+	cout << "\nThis key under index = " << bin_find_mod(a, N, key) << "\n";
 	filldec(a, N);
 	printmas(a, N);
-	insertSort(a, N);
-	cout << "\n\n";
+	shellSort(a, N);
+	printmas(a, N);
+	cout << "\nThis key under index = " << bin_find_mod(a, N, key) << "\n";
 	fillrand(a, N);
 	printmas(a, N);
-	insertSort(a, N);
+	shellSort(a, N);
+	printmas(a, N);
+	cout << "\nThis key under index = " << bin_find_mod(a, N, key) << "\n";
+
+	// Table 1 
+	cout << "\n\n\tTable #1";
+	cout << "\nSize|C_1|C_2";
+	key = 67;
+	for (int i = 100; i < 1001; i += 100) {
+		int* arr;
+		arr = new int[i];
+		int c_1 = 0,
+			c_2 = 0;
+		fillrand(arr, i);
+		ShakerSort(arr, i);
+		bin_find(arr, i, key, c_1);
+		bin_find_mod(arr, i, key, c_2);
+		cout << "\n" << i << "|" << c_1 << "|" << c_2;
+	}
 	return 0;
 }

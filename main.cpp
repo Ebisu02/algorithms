@@ -23,7 +23,7 @@ void filldec(int arr[], int size) {
 void fillrand(int arr[], int size) {
 	srand(time(NULL));
 	for (int i = 0; i < size; ++i) {
-		arr[i] = rand() % 1000;
+		arr[i] = rand() % size;
 	}
 	return;
 }
@@ -85,7 +85,6 @@ void SelectSort(int arr[], int size) {
 	return;
 }
 
-
 void BubleSort(int arr[], int size) {
 	int M = 0; int C = 0;
 	for (int i = 0; i < size - 1; i++)
@@ -100,7 +99,6 @@ void BubleSort(int arr[], int size) {
 	std::cout << "\nPrakti4eskoe kolvo peresilok - " << M << "\n" << "Prakti4eskoe kolvo sravneniy - " << C;
 	return;
 }
-
 
 void SelectSortFromLesson(int arr[], int size) {
 	int j, zm, num, c = 0, m = 0;
@@ -246,6 +244,7 @@ void shellSort(int arr[], int size, int& c, int& moves, int &count) {
 	}
 	return;
 }
+
 void shellSort_adv(int arr[], int size, int& c, int& moves, int& count) {
 	count = -1;
 	for (int i = size / 2; i > 0; i /= 2, ++count)
@@ -335,52 +334,79 @@ int bin_find_mod(int arr[], int size, int key, int& c) {
 	}
 	return -1;
 }
+ 
+void make_heap(int arr[], int n, int i, int& move, int& compare)
+{
+	// Функция чтобы скопировать поддерево с корневым узлом i,
+	// которая является индексом в массиве arr[].
+	// n - размер дерева
+	int largest = i; // Задаем наибольший как корень дерева
+	int left = 2 * i + 1; // Левый = 2 * i + 1
+	int right = 2 * i + 2; // Правый = 2 * i + 2
+
+	// Если левый ребенок больше, чем корень
+	if (left < n && arr[left] > arr[largest]) {
+		++compare;
+		largest = left;
+	}
+
+	// Если правый ребенок на данный момент больше самого большого
+	if (right < n && arr[right] > arr[largest]) {
+		++compare;
+		largest = right;
+	}
+
+	// Если наибольший не корень
+	if (largest != i) {
+		++compare;
+		swap(arr[i], arr[largest]);
+		++move;
+		// Рекурсивно скопируем поддерево
+		make_heap(arr, n, largest, move, compare);
+	}
+}
+
+void heapSort(int arr[], int n, int& move, int& compare)
+{
+	// Строим дерево
+	for (int i = n / 2 - 1; i >= 0; i--) {
+		make_heap(arr, n, i, move, compare);
+	}
+
+	// Один за другим извлекаем элемент из дерева
+	for (int i = n - 1; i > 0; i--) {
+		// Перемещаем текущий элемент корень в конец
+		swap(arr[0], arr[i]);
+		++move;
+		// Вызываем построение новой кучи 
+		make_heap(arr, i, 0, move, compare);
+	}
+}
 
 int main() {
-	// Lab 7
-	fillinc(a, N);
-	printmas(a, N);
-	int key = 10;
-	cout << "\nThis key under index = " << bin_find(a, N, key) << "\n";
+	int compare = 0, move = 0;
+	// Lab 9
 	filldec(a, N);
 	printmas(a, N);
-	shellSort(a, N);
+	heapSort(a, N, move, compare);
+	cout << "\n";
 	printmas(a, N);
-	cout << "\nThis key under index = " << bin_find(a, N, key) << "\n";
-	fillrand(a, N);
-	printmas(a, N);
-	shellSort(a, N);
-	printmas(a, N);
-	cout << "\nThis key under index = " << bin_find(a, N, key) << "\n";
-	cout << "\n\n";
-	fillinc(a, N);
-	printmas(a, N);
-	cout << "\nThis key under index = " << bin_find_mod(a, N, key) << "\n";
-	filldec(a, N);
-	printmas(a, N);
-	shellSort(a, N);
-	printmas(a, N);
-	cout << "\nThis key under index = " << bin_find_mod(a, N, key) << "\n";
-	fillrand(a, N);
-	printmas(a, N);
-	shellSort(a, N);
-	printmas(a, N);
-	cout << "\nThis key under index = " << bin_find_mod(a, N, key) << "\n";
-
-	// Table 1 
-	cout << "\n\n\tTable #1";
-	cout << "\nSize|C_1|C_2";
-	key = 67;
-	for (int i = 100; i < 1001; i += 100) {
+	cout << "\nCompares = " << compare << "\nMoves = " << move << "\n";
+	// Table 1
+	cout << "\nSize|Inc |Dec |Rand";
+	for (int i = 100; i < 501; i += 100) {
+		int compare_inc = 0, move_inc = 0,
+			compare_dec = 0, move_dec = 0,
+			compare_rand = 0, move_rand = 0;
 		int* arr;
 		arr = new int[i];
-		int c_1 = 0,
-			c_2 = 0;
+		fillinc(arr, i);
+		heapSort(arr, i, move_inc, compare_inc);
+		filldec(arr, i);
+		heapSort(arr, i, move_dec, compare_dec);
 		fillrand(arr, i);
-		ShakerSort(arr, i);
-		bin_find(arr, i, key, c_1);
-		bin_find_mod(arr, i, key, c_2);
-		cout << "\n" << i << "|" << c_1 << "|" << c_2;
+		heapSort(arr, i, move_rand, compare_rand);
+		cout << "\n " << i << "|" << move_inc + compare_inc << "|" << move_dec + compare_dec << "|" << move_rand + compare_rand;
 	}
 	return 0;
 }

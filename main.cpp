@@ -383,12 +383,77 @@ void heapSort(int arr[], int n, int& move, int& compare)
 	}
 }
 
+void Heap(int arr[], int size, int left, int right, int& move, int& compare) {
+	int x = arr[left];
+	int i = left;
+	while (1) {
+		int j = 2 * i;
+		if (++compare && j > right) {
+			break;
+		}
+		if (++compare && (j < right) && (arr[j + 1] <= arr[j])) {
+			++j;
+		}
+		if (++compare && x <= arr[j]) {
+			break;
+		}
+		arr[i] = arr[j];
+		++move;
+		i = j;
+	}
+	arr[i] = x;
+}
+
+void HeapSort(int arr[], int size, int& move, int& compare) {
+	int left = (size / 2);
+	while (left >= 0) {
+		Heap(arr, size, left, size, move, compare);
+		--left;
+	}
+	int right = size;
+	while (right >= 1) {
+		swap(arr[0], arr[right]);
+		move += 3;
+		--right;
+		Heap(arr, size, 0, right, move, compare);
+	}
+	return;
+}
+
+void QuickSortOne(int arr[], int size, int left, int& move, int& compare) {
+	int right = size;
+	int x = arr[left];
+	int i = left;
+	int j = right;
+	while (++compare && i <= j) {
+		while (++compare && arr[i] < x) {
+			++i;
+		}
+		while (++compare && arr[j] > x) {
+			--j;
+		}
+		if (++compare && i <= j) {
+			swap(arr[i], arr[j]);
+			move += 3;
+			++i;
+			--j;
+		}
+	}
+	if (++compare && left < j) {
+		QuickSortOne(arr, j, left, move, compare);
+	}
+	if (++compare && i < right) {
+		QuickSortOne(arr, right, i, move, compare);
+	}
+	return;
+}
+
 int main() {
 	int compare = 0, move = 0;
 	// Lab 9
-	filldec(a, N);
+	fillinc(a, N);
 	printmas(a, N);
-	heapSort(a, N, move, compare);
+	HeapSort(a, N, move, compare);
 	cout << "\n";
 	printmas(a, N);
 	cout << "\nCompares = " << compare << "\nMoves = " << move << "\n";
@@ -401,11 +466,37 @@ int main() {
 		int* arr;
 		arr = new int[i];
 		fillinc(arr, i);
-		heapSort(arr, i, move_inc, compare_inc);
+		HeapSort(arr, i, move_inc, compare_inc);
 		filldec(arr, i);
-		heapSort(arr, i, move_dec, compare_dec);
+		HeapSort(arr, i, move_dec, compare_dec);
 		fillrand(arr, i);
-		heapSort(arr, i, move_rand, compare_rand);
+		HeapSort(arr, i, move_rand, compare_rand);
+		cout << "\n " << i << "|" << move_inc + compare_inc << "|" << move_dec + compare_dec << "|" << move_rand + compare_rand;
+	}
+	
+	// Lab 10
+	int C = 0, M = 0;
+	cout << "\n\n";
+	filldec(a, N);
+	printmas(a, N);
+	QuickSortOne(a, N - 1, 0, M, C);
+	cout << "\n";
+	printmas(a, N);
+	cout << "\nCompares = " << C << "\nMoves = " << M << "\n";
+	// Table 1
+	cout << "\nSize|Inc |Dec |Rand"; // C = nlogn , M = nlogn, т.е. M + C = 2nlogn
+	for (int i = 100; i < 501; i += 100) {
+		int compare_inc = 0, move_inc = 0,
+			compare_dec = 0, move_dec = 0,
+			compare_rand = 0, move_rand = 0;
+		int* arr;
+		arr = new int[i];
+		fillinc(arr, i);
+		QuickSortOne(arr, i - 1, 0, move_inc, compare_inc);
+		filldec(arr, i);
+		QuickSortOne(arr, i - 1, 0, move_dec, compare_dec);
+		fillrand(arr, i);
+		QuickSortOne(arr, i - 1, 0, move_rand, compare_rand);
 		cout << "\n " << i << "|" << move_inc + compare_inc << "|" << move_dec + compare_dec << "|" << move_rand + compare_rand;
 	}
 	return 0;

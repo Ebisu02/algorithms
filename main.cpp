@@ -448,56 +448,148 @@ void QuickSortOne(int arr[], int size, int left, int& move, int& compare) {
 	return;
 }
 
+template <typename T>
+class List {
+
+public:
+
+	List();
+	~List();
+
+	void pop_front();
+	void push_back(T data);
+	int getSize();
+	void clear();
+	// TODO: 
+	void fillInc(int size);
+	void fillDec(int size);
+	void fillRand(int size);
+	void print();
+	int checkSum();
+	int runNumber();
+
+	T& operator[](const int index);
+
+private:
+
+	template <typename T>
+	class Node {
+
+	public:
+		Node* pNext;
+		T data;
+		Node(T data = T(), Node* pNext = NULL) {
+			this->data = data;
+			this->pNext = pNext;
+		}
+	};
+	int Size;
+	Node<T>* head;
+};
+
+template <typename T>
+List<T>::List() {
+	Size = 0;
+	head = nullptr;
+}
+
+
+template <typename T>
+List<T>::~List() {
+	clear();
+}
+
+template<typename T>
+void List<T>::pop_front()
+{
+	Node<T>* Temp = head;
+	head = head->pNext;
+	delete Temp;
+	--Size;
+}
+
+template<typename T>
+void List<T>::push_back(T data)
+{
+
+	if (head == nullptr) {
+		head = new Node<T>(data);
+	}
+	else {
+		Node<T>* Current = this->head;
+
+		while (Current->pNext != nullptr) {
+			Current = Current->pNext;
+		}
+
+		Current->pNext = new Node<T>(data);
+
+	}
+
+	++Size;
+}
+
+template<typename T>
+void List<T>::clear()
+{
+
+	while (Size) { // ���� Size > 0
+		pop_front();
+	}
+
+}
+
+template<typename T>
+int List<T>::getSize()
+{
+	return Size;
+}
+
+template<typename T>
+void List<T>::fillInc(int size) 
+{
+	int count = 0;
+	while (count < size) {
+		push_back(count + 1);
+		++count;
+	}
+}
+
+template<typename T>
+void List<T>::fillDec(int size)
+{
+	int count = 0;
+	while (count < size) {
+		push_back(size - count);
+		++count;
+	}
+}
+
+template<typename T>
+void List<T>::fillRand(int size)
+{
+	int count = 0; 
+	srand(time(nullptr));
+	while (count < size) {
+		push_back(rand() % size);
+		++count;
+	}
+}
+
+template<typename T>
+void List<T>::print()
+{
+	Node<T>* Current;
+	Current = this->head;
+	int count = 0;
+	while (count < size && Current->pNext != nullptr) {
+		cout << Current->data;
+		Current = Current->pNext;
+		++count;
+	}
+}
+
 int main() {
-	int compare = 0, move = 0;
-	// Lab 9
-	fillinc(a, N);
-	printmas(a, N);
-	HeapSort(a, N, move, compare);
-	cout << "\n";
-	printmas(a, N);
-	cout << "\nCompares = " << compare << "\nMoves = " << move << "\n";
-	// Table 1
-	cout << "\nSize|Inc |Dec |Rand";
-	for (int i = 100; i < 501; i += 100) {
-		int compare_inc = 0, move_inc = 0,
-			compare_dec = 0, move_dec = 0,
-			compare_rand = 0, move_rand = 0;
-		int* arr;
-		arr = new int[i];
-		fillinc(arr, i);
-		HeapSort(arr, i, move_inc, compare_inc);
-		filldec(arr, i);
-		HeapSort(arr, i, move_dec, compare_dec);
-		fillrand(arr, i);
-		HeapSort(arr, i, move_rand, compare_rand);
-		cout << "\n " << i << "|" << move_inc + compare_inc << "|" << move_dec + compare_dec << "|" << move_rand + compare_rand;
-	}
-	
-	// Lab 10
-	int C = 0, M = 0;
-	cout << "\n\n";
-	filldec(a, N);
-	printmas(a, N);
-	QuickSortOne(a, N - 1, 0, M, C);
-	cout << "\n";
-	printmas(a, N);
-	cout << "\nCompares = " << C << "\nMoves = " << M << "\n";
-	// Table 1
-	cout << "\nSize|Inc |Dec |Rand"; // C = nlogn , M = nlogn, т.е. M + C = 2nlogn
-	for (int i = 100; i < 501; i += 100) {
-		int compare_inc = 0, move_inc = 0,
-			compare_dec = 0, move_dec = 0,
-			compare_rand = 0, move_rand = 0;
-		int* arr;
-		arr = new int[i];
-		fillinc(arr, i);
-		QuickSortOne(arr, i - 1, 0, move_inc, compare_inc);
-		filldec(arr, i);
-		QuickSortOne(arr, i - 1, 0, move_dec, compare_dec);
-		fillrand(arr, i);
-		QuickSortOne(arr, i - 1, 0, move_rand, compare_rand);
-		cout << "\n " << i << "|" << move_inc + compare_inc << "|" << move_dec + compare_dec << "|" << move_rand + compare_rand;
-	}
+
 	return 0;
 }

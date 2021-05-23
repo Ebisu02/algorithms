@@ -611,8 +611,222 @@ int Stack<T>::runNumber()
 	return run;
 }
 
+
+template <typename T>
+class List {
+
+public:
+
+	List();
+	~List();
+
+	void pop_front();
+	void push_back(T data);
+	int getSize();
+	void clear();
+	// TODO: 
+	void fillInc(int size);
+	void fillDec(int size);
+	void fillRand(int size);
+	void print();
+	int checkSum();
+	int runNumber();
+	T data(int index);
+
+private:
+
+	template <typename T>
+	class Node {
+
+	public:
+		Node* pNext;
+		T data;
+		Node(T data = T(), Node* pNext = NULL) {
+			this->data = data;
+			this->pNext = pNext;
+		}
+	};
+	int Size;
+	Node<T>* head;
+};
+
+template <typename T>
+List<T>::List() {
+	Size = 0;
+	head = nullptr;
+}
+
+
+template <typename T>
+List<T>::~List() {
+	clear();
+}
+
+template<typename T>
+void List<T>::pop_front()
+{
+	Node<T>* Temp = head;
+	head = head->pNext;
+	delete Temp;
+	--Size;
+}
+
+template<typename T>
+void List<T>::push_back(T data)
+{
+
+	if (head == nullptr) {
+		head = new Node<T>(data);
+	}
+	else {
+		Node<T>* Current = this->head;
+
+		while (Current->pNext != nullptr) {
+			Current = Current->pNext;
+		}
+
+		Current->pNext = new Node<T>(data);
+
+	}
+
+	++Size;
+}
+
+template<typename T>
+void List<T>::clear()
+{
+
+	while (Size) { // ���� Size > 0
+		pop_front();
+	}
+
+}
+
+template<typename T>
+int List<T>::getSize()
+{
+	return Size;
+}
+
+template<typename T>
+void List<T>::fillInc(int size)
+{
+	int count = 0;
+	while (count < size) {
+		push_back(count + 1);
+		++count;
+	}
+}
+
+template<typename T>
+void List<T>::fillDec(int size)
+{
+	int count = 0;
+	while (count < size) {
+		push_back(size - count);
+		++count;
+	}
+}
+
+template<typename T>
+void List<T>::fillRand(int size)
+{
+	int count = 0;
+	srand(time(nullptr));
+	while (count < size) {
+		push_back(rand() % size);
+		++count;
+	}
+}
+
+template<typename T>
+void List<T>::print()
+{
+	if (Size > 0) {
+		Node<T>* Temp = head;
+		while (Temp) {
+			cout << Temp->data << " ";
+			Temp = Temp->pNext;
+		}
+	}
+	else {
+		return;
+	}
+}
+
+template<typename T>
+int List<T>::checkSum()
+{
+	int sum = 0;
+	Node<T>* Temp = head;
+	while (Temp) {
+		sum += Temp->data;
+		Temp = Temp->pNext;
+	}
+	return sum;
+}
+
+template<typename T>
+int List<T>::runNumber()
+{
+	int run = 1;
+	Node<T>* Temp = head;
+	while (Temp->pNext) {
+		if (Temp->data < Temp->pNext->data) {
+			++run;
+		}
+		Temp = Temp->pNext;
+	}
+	return run;
+}
+
+template<typename T>
+T List<T>::data(int index)
+{
+	Node<T>* Temp = head;
+	int Current = 0;
+	if (index >= Size || index < 0) {
+		return -1;
+	}
+	while (Temp) {
+		if (Current == index) {
+			return Temp->data;
+		}
+		++Current;
+		Temp = Temp->pNext;
+	}
+}
+
+// Представим, что список - серия и очередь C пустая по условия
+template<typename T>
+void MergeSeriesSort(List<T>& a, List<T>& b, List<T>& c) {
+	int q = 0;
+	int r = 0;
+	while (q < a.getSize() && r < b.getSize()) {
+		if (a.data(q) <= b.data(r)) {
+			c.push_back(a.data(q));
+			++q;
+		}
+		else {
+			c.push_back(b.data(r));
+			++r;
+		}
+	}
+	while (q < a.getSize()) {
+		c.push_back(a.data(q));
+		++q;
+	}
+	while (r < b.getSize()) {
+		c.push_back(b.data(r));
+		++r;
+	}
+	return;
+}
+
 int main() {
 	// Lab 11
+
+	/*
 	int size = 10;
 	Stack<int> mystackInc;
 	mystackInc.fillInc(size);
@@ -635,7 +849,33 @@ int main() {
 	cout << "\nsum = " << sum;
 	run = mystackRand.runNumber();
 	cout << "\nrun = " << run << "\n";
-	// Lab 12
+	*/
 
+
+
+	// Lab 12.1
+
+	/*
+	List<int> a;
+	List<int> b;
+	List<int> c;
+	a.fillInc(10);
+	cout << "List a:\n";
+	a.print();
+	cout << "\nSum = " << a.checkSum() << "\nRun = " << a.runNumber();
+	b.fillInc(14);
+	cout << "\nList b:\n";
+	b.print();
+	cout << "\nSum = " << b.checkSum() << "\nRun = " << b.runNumber();
+	MergeSeriesSort(a, b, c);
+	cout << "\nList c (This list was created by Merge Sorting Lists 'a' and 'b':\n";
+	c.print();
+	cout << "\nSum = " << c.checkSum() << "\nRun = " << c.runNumber();
+	*/
+
+
+
+	// Lab 12.2
+	
 	return 0;
 }

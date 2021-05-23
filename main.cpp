@@ -449,15 +449,15 @@ void QuickSortOne(int arr[], int size, int left, int& move, int& compare) {
 }
 
 template <typename T>
-class List {
+class Stack {
 
 public:
 
-	List();
-	~List();
+	Stack();
+	~Stack();
 
-	void pop_front();
-	void push_back(T data);
+	void pop();
+	void push(T data);
 	int getSize();
 	void clear();
 	// TODO: 
@@ -467,8 +467,6 @@ public:
 	void print();
 	int checkSum();
 	int runNumber();
-
-	T& operator[](const int index);
 
 private:
 
@@ -488,108 +486,156 @@ private:
 };
 
 template <typename T>
-List<T>::List() {
+Stack<T>::Stack() {
 	Size = 0;
 	head = nullptr;
 }
 
 
 template <typename T>
-List<T>::~List() {
+Stack<T>::~Stack() {
 	clear();
 }
 
 template<typename T>
-void List<T>::pop_front()
+void Stack<T>::pop()
 {
-	Node<T>* Temp = head;
-	head = head->pNext;
-	delete Temp;
+	Node<T>* Temp;
+	Temp = head;
+	if (Temp != nullptr && Size > 1) {
+		head = Temp->pNext;
+		delete Temp;
+	}
+	else {
+		delete Temp;
+	}
 	--Size;
 }
 
 template<typename T>
-void List<T>::push_back(T data)
+void Stack<T>::push(T data)
 {
-
+	Node<T>* Temp;
+	Temp = new Node<T>;
+	Temp->data = data;
 	if (head == nullptr) {
-		head = new Node<T>(data);
+		head = Temp;
 	}
 	else {
-		Node<T>* Current = this->head;
-
-		while (Current->pNext != nullptr) {
-			Current = Current->pNext;
-		}
-
-		Current->pNext = new Node<T>(data);
-
+		Temp->pNext = head;
+		head = Temp;
 	}
-
 	++Size;
 }
 
 template<typename T>
-void List<T>::clear()
+void Stack<T>::clear()
 {
 
-	while (Size) { // ���� Size > 0
-		pop_front();
+	while (Size) {
+		pop();
 	}
 
 }
 
 template<typename T>
-int List<T>::getSize()
+int Stack<T>::getSize()
 {
 	return Size;
 }
 
 template<typename T>
-void List<T>::fillInc(int size) 
+void Stack<T>::fillInc(int size) 
 {
 	int count = 0;
 	while (count < size) {
-		push_back(count + 1);
+		push(count + 1);
 		++count;
 	}
 }
 
 template<typename T>
-void List<T>::fillDec(int size)
+void Stack<T>::fillDec(int size)
 {
 	int count = 0;
 	while (count < size) {
-		push_back(size - count);
+		push(size - count);
 		++count;
 	}
 }
 
 template<typename T>
-void List<T>::fillRand(int size)
+void Stack<T>::fillRand(int size)
 {
 	int count = 0; 
 	srand(time(nullptr));
 	while (count < size) {
-		push_back(rand() % size);
+		push(rand() % size);
 		++count;
 	}
 }
 
 template<typename T>
-void List<T>::print()
+void Stack<T>::print()
 {
-	Node<T>* Current;
-	Current = this->head;
-	int count = 0;
-	while (count < size && Current->pNext != nullptr) {
-		cout << Current->data;
-		Current = Current->pNext;
-		++count;
+	Node<T>* Temp = head;
+	while (Temp) {
+		cout << Temp->data << " ";
+		Temp = Temp->pNext;
 	}
 }
 
+template<typename T>
+int Stack<T>::checkSum()
+{
+	int sum = 0;
+	Node<T>* Temp = head;
+	while (Temp) {
+		sum += Temp->data;
+		Temp = Temp->pNext;
+	}
+	return sum;
+}
+
+template<typename T>
+int Stack<T>::runNumber()
+{
+	int run = 1;
+	Node<T>* Temp = head;
+	while (Temp->pNext) {
+		if (Temp->data < Temp->pNext->data) {
+			++run;
+		}
+		Temp = Temp->pNext;
+	}
+	return run;
+}
+
 int main() {
+	// Lab 11
+	int size = 10;
+	Stack<int> mystackInc;
+	mystackInc.fillInc(size);
+	mystackInc.print();
+	int sum = mystackInc.checkSum();
+	cout << "\nsum = " << sum;
+	int run = mystackInc.runNumber();
+	cout << "\nrun = " << run << "\n";
+	Stack<int> mystackDec;
+	mystackDec.fillDec(size);
+	mystackDec.print();
+	sum = mystackDec.checkSum();
+	cout << "\nsum = " << sum;
+	run = mystackDec.runNumber();
+	cout << "\nrun = " << run << "\n";
+	Stack<int> mystackRand;
+	mystackRand.fillRand(size);
+	mystackRand.print();
+	sum = mystackRand.checkSum();
+	cout << "\nsum = " << sum;
+	run = mystackRand.runNumber();
+	cout << "\nrun = " << run << "\n";
+	// Lab 12
 
 	return 0;
 }

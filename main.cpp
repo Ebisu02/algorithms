@@ -173,9 +173,9 @@ void insertSort(int arr[], int size, int& c, int& m) {
 	return;
 }
 
-void shellSort(int arr[], int size, int& c, int &moves) {
+void shellSort(int arr[], int size, int& c, int& moves) {
 	int* h;
-	h = new int [size];
+	h = new int[size];
 	int k, t, j;
 	int m = log(size) / log(2) - 1;
 	h[0] = 1;
@@ -222,7 +222,7 @@ void shellSort(int arr[], int size) {
 	return;
 }
 
-void shellSort(int arr[], int size, int& c, int& moves, int &count) {
+void shellSort(int arr[], int size, int& c, int& moves, int& count) {
 	int* h;
 	h = new int[size];
 	int k, t, j;
@@ -300,7 +300,7 @@ int bin_find(int arr[], int size, int key, int& c) {
 }
 
 int bin_find_mod(int arr[], int size, int key) {
-	int left = 0; 
+	int left = 0;
 	int right = size - 1;
 	while (left < right) {
 		int mid = (left + right) / 2;
@@ -334,7 +334,7 @@ int bin_find_mod(int arr[], int size, int key, int& c) {
 	}
 	return -1;
 }
- 
+
 void make_heap(int arr[], int n, int i, int& move, int& compare)
 {
 	// Функция чтобы скопировать поддерево с корневым узлом i,
@@ -545,7 +545,7 @@ int Stack<T>::getSize()
 }
 
 template<typename T>
-void Stack<T>::fillInc(int size) 
+void Stack<T>::fillInc(int size)
 {
 	int count = 0;
 	while (count < size) {
@@ -567,7 +567,7 @@ void Stack<T>::fillDec(int size)
 template<typename T>
 void Stack<T>::fillRand(int size)
 {
-	int count = 0; 
+	int count = 0;
 	srand(time(nullptr));
 	while (count < size) {
 		push(rand() % size);
@@ -632,8 +632,8 @@ public:
 	int checkSum();
 	int runNumber();
 	T data(int index);
+	T& operator[](const int index);
 
-private:
 
 	template <typename T>
 	class Node {
@@ -647,13 +647,106 @@ private:
 		}
 	};
 	int Size;
+	Node<T>* tail;
 	Node<T>* head;
+
+
+	void DestroyList(List<T>& list, Node<T>* a, Node<T>* b, int n)
+	{
+		a = list.head;
+		b = list.head->pNext;
+		Node<T>* k = a;
+		Node<T>* p = b;
+		n = 1;
+		while (p)
+		{
+			++n;
+			k->pNext = p->pNext;
+			k = p;
+			p = p->pNext;
+		}
+	}
+
+	void MergeList(Node<T>* a, int q, Node<T>* b, int r, List<T>& c)
+	{
+		c.clear();
+		while (q > 0&& r > 0)
+		{
+			if (a->data <= b->data)
+			{
+				c.push_back(a->data);
+				--q;
+				a = a->pNext;
+			}
+			else
+			{
+				c.push_back(b->data);
+				--r;
+				b = b->pNext;
+			}
+		}
+		while (q > 0)
+		{
+			c.push_back(a->data);
+			--q;
+			a = a->pNext;
+		}
+		while (r > 0)
+		{
+			c.push_back(b->data);
+			--r;
+			b = b->pNext;
+		}
+	}
+
+	void MergeSort(List<T>& list)
+	{
+		int n = list.getSize();
+		Node<T>* a = head, * b = head->pNext;
+		DestroyList(list, a, b, n);
+		List<T> c[2];
+		int p, q, r, m, i;
+		p = 1;
+		while (p < n)
+		{
+			i = 0; 
+			m = n;
+			while (m > 0)
+			{
+				if (m >= p)
+				{
+					q = p;
+				}
+				else
+				{
+					q = m;
+				}
+				m -= q;
+				if (m >= p)
+				{
+					r = p;
+				}
+				else
+				{
+					r = m;
+				}
+				m -= r;
+				MergeList(a, q, b, r, c[i]);
+				i = 1 - i;
+			}
+			a = c[0].head;
+			b = c[1].head;
+			p = 2 * p;
+		}
+		list = c[0];
+	}
 };
 
 template <typename T>
 List<T>::List() {
 	Size = 0;
 	head = nullptr;
+	tail = nullptr;
 }
 
 
@@ -677,16 +770,12 @@ void List<T>::push_back(T data)
 
 	if (head == nullptr) {
 		head = new Node<T>(data);
+		tail = head;
 	}
 	else {
-		Node<T>* Current = this->head;
-
-		while (Current->pNext != nullptr) {
-			Current = Current->pNext;
-		}
-
-		Current->pNext = new Node<T>(data);
-
+		tail->pNext = new Node<T>(data);
+		tail = tail->pNext;
+		tail->pNext = nullptr;
 	}
 
 	++Size;
@@ -783,17 +872,37 @@ int List<T>::runNumber()
 template<typename T>
 T List<T>::data(int index)
 {
-	Node<T>* Temp = head;
-	int Current = 0;
 	if (index >= Size || index < 0) {
-		return -1;
+		return 0;
 	}
-	while (Temp) {
+	if (index == 0)
+	{
+		return head->data;
+	}
+	Node<T>* Temp;
+	Temp = head;
+	int Current = 0;
+	while (Temp)
+	{
 		if (Current == index) {
 			return Temp->data;
 		}
-		++Current;
 		Temp = Temp->pNext;
+		++Current;
+	}
+}
+
+template<typename T>
+T& List<T>::operator[](const int index) {
+
+	Node<T>* Current = this->head;
+	int counter = 0;
+	while (Current != nullptr) {			// Пока это не конец списка
+		if (counter == index) {				// Если мы попали в нужный элемент списка
+			return Current->data;			// Возвращаем данные
+		}
+		Current = Current->pNext;			// Если не попали, то переходим к следующему
+		++counter;							// Увеличиваем индекс на котором мы сейчас находимся на 1
 	}
 }
 
@@ -802,6 +911,7 @@ template<typename T>
 void MergeSeriesSort(List<T>& a, List<T>& b, List<T>& c) {
 	int q = 0;
 	int r = 0;
+	c.clear();
 	while (q < a.getSize() && r < b.getSize()) {
 		if (a.data(q) <= b.data(r)) {
 			c.push_back(a.data(q));
@@ -823,59 +933,126 @@ void MergeSeriesSort(List<T>& a, List<T>& b, List<T>& c) {
 	return;
 }
 
+void merge(int arr[], int sizeForArr, int L[], int sizeForL, int R[], int sizeForR, int& Moves, int& Compares)
+{
+	int i = 0;
+	int j = 0;
+	while (i < sizeForL || j < sizeForR)
+	{
+		if (i < sizeForL && j < sizeForR)
+		{
+			++Compares;
+			if (L[i] <= R[j])
+			{
+				Moves += 3;
+				arr[i + j] = L[i];
+				++i;
+			}
+			else
+			{
+				Moves += 3;
+				arr[i + j] = R[j];
+				++j;
+			}
+		}
+		else if (i < sizeForL)
+		{
+			arr[i + j] = L[i];
+			++i;
+		}
+		else if (j < sizeForR)
+		{
+			arr[i + j] = R[j];
+			++j;
+		}
+	}
+}
+
+void MergeSort(int arr[], int size, int& Moves, int& Compares)
+{
+	if (size > 1)
+	{
+		int middle = size / 2;
+		int rem = size - middle;
+		int* L = new int[middle];
+		int* R = new int[rem];
+		for (int i = 0; i < size; ++i)
+		{
+			if (i < middle)
+			{
+				L[i] = arr[i];
+				Moves += 3;
+			}
+			else
+			{
+				R[i - middle] = arr[i];
+				Moves += 3;
+			}
+		}
+		MergeSort(L, middle, Moves, Compares);
+		MergeSort(R, rem, Moves, Compares);
+		merge(arr, size, L, middle, R, rem, Moves, Compares);
+	}
+}
+
+int GetMax(int arr[], int n, int& Compares)
+{
+	int mx = arr[0];
+	for (int i = 1; i < n; ++i)
+	{
+		++Compares;
+		if (arr[i] > mx)
+		{
+			mx = arr[i];
+		}
+	}
+	return mx;
+}
+
+void CountSort(int arr[], int n, int exp, int& Moves)
+{
+	int* output = new int [n];
+	int i, count[10] = { 0 };
+
+	for (int i = 0; i < n; ++i)
+	{
+		count[(arr[i] / exp) % 10]++;
+	}
+
+	for (int i = 1; i < 10; ++i)
+	{
+		count[i] += count[i - 1];
+	}
+
+	for (i = n - 1; i >= 0; --i)
+	{
+		output[count[(arr[i] / exp) % 10] - 1] = arr[i];
+		Moves += 3;
+		--count[(arr[i] / exp) % 10];
+	}
+
+	for (int i = 0; i < n; ++i)
+	{
+		Moves += 3;
+		arr[i] = output[i];
+	}
+}
+
+void DigitalSort(int arr[], int n, int& Moves, int& Compares)
+{
+	int m = GetMax(arr, n, Compares);
+
+	for (int exp = 1; m / exp > 0; exp *= 10)
+	{
+		CountSort(arr, n, exp, Moves);
+	}
+}
+
 int main() {
-	// Lab 11
-
-	/*
-	int size = 10;
-	Stack<int> mystackInc;
-	mystackInc.fillInc(size);
-	mystackInc.print();
-	int sum = mystackInc.checkSum();
-	cout << "\nsum = " << sum;
-	int run = mystackInc.runNumber();
-	cout << "\nrun = " << run << "\n";
-	Stack<int> mystackDec;
-	mystackDec.fillDec(size);
-	mystackDec.print();
-	sum = mystackDec.checkSum();
-	cout << "\nsum = " << sum;
-	run = mystackDec.runNumber();
-	cout << "\nrun = " << run << "\n";
-	Stack<int> mystackRand;
-	mystackRand.fillRand(size);
-	mystackRand.print();
-	sum = mystackRand.checkSum();
-	cout << "\nsum = " << sum;
-	run = mystackRand.runNumber();
-	cout << "\nrun = " << run << "\n";
-	*/
-
-
-
-	// Lab 12.1
-
-	/*
-	List<int> a;
-	List<int> b;
-	List<int> c;
-	a.fillInc(10);
-	cout << "List a:\n";
-	a.print();
-	cout << "\nSum = " << a.checkSum() << "\nRun = " << a.runNumber();
-	b.fillInc(14);
-	cout << "\nList b:\n";
-	b.print();
-	cout << "\nSum = " << b.checkSum() << "\nRun = " << b.runNumber();
-	MergeSeriesSort(a, b, c);
-	cout << "\nList c (This list was created by Merge Sorting Lists 'a' and 'b':\n";
-	c.print();
-	cout << "\nSum = " << c.checkSum() << "\nRun = " << c.runNumber();
-	*/
-
-
-
-	// Lab 12.2
-	
+	List<int> list;
+	list.fillDec(10);
+	list.print();
+	list.MergeSort(list);
+	list.print();
 	return 0;
 }
